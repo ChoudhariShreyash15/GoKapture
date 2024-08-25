@@ -1,0 +1,27 @@
+CREATE DATABASE IF NOT EXISTS gokapture;
+
+USE gokapture;
+
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS tasks;
+
+CREATE TABLE users (
+    id          VARCHAR(21) NOT NULL PRIMARY KEY,
+    username    VARCHAR(255) NOT NULL UNIQUE,
+    password    VARCHAR(255) NOT NULL,
+    isDeleted   BOOLEAN DEFAULT 0,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tasks (
+    id          VARCHAR(21) NOT NULL PRIMARY KEY,
+    title       VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    status      VARCHAR(255) DEFAULT 'todo',
+    priority    INT DEFAULT 1,
+    due_date    TIMESTAMP DEFAULT NULL,
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id     VARCHAR(21) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
