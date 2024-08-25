@@ -12,7 +12,6 @@ Certainly! Here's the updated README file that includes instructions for using t
 2. [Prerequisites](#prerequisites)
 3. [Getting Started](#getting-started)
    - [Clone the Repository](#clone-the-repository)
-   - [Environment Variables](#environment-variables)
    - [Build and Run the Application](#build-and-run-the-application)
 4. [Application Structure](#application-structure)
 5. [Usage](#usage)
@@ -44,23 +43,6 @@ git clone https://github.com/yourusername/your-repo-name.git
 cd your-repo-name
 ```
 
-### Environment Variables
-
-Create a `.env` file in the root of the project and configure the following environment variables:
-
-```bash
-# MySQL Database Configuration
-MYSQL_ROOT_PASSWORD= admin
-MYSQL_DATABASE= gokapture
-MYSQL_USER= user
-MYSQL_PASSWORD= admin
-
-# Application Configuration
-APP_PORT=3000
-```
-
-You can customize the values based on your needs. The `.env` file is used by Docker Compose to inject the environment variables into the containers.
-
 ### Build and Run the Application
 
 Use Docker Compose to build and run the application:
@@ -77,6 +59,41 @@ This command will:
 
 Once the containers are up and running, the application should be accessible at `http://localhost:3000` (or the port you specified).
 
+If you get the following error then follow the steps provided
+```
+"error": {
+            "code": "ER_NOT_SUPPORTED_AUTH_MODE",
+            "errno": 1251,
+            "sqlMessage": "Client does not support authentication protocol requested by server; consider upgrading MySQL client",
+            "sqlState": "08004",
+            "fatal": true
+        }
+```
+
+### Steps:
+
+1. **Access the MySQL container:**
+
+   ```bash
+   docker exec -it mysqlcontainer mysql -u root -p
+   ```
+
+2. **Run the following SQL commands:**
+
+   ```sql
+   ALTER USER 'admin'@'%' IDENTIFIED WITH mysql_native_password BY 'admin';
+   FLUSH PRIVILEGES;
+   ```
+
+   This command changes the authentication method for the `admin` user to `mysql_native_password`.
+
+3. **Restart your Node.js application** if it’s running, or **rerun your tests** in Postman.
+
+   ```bash
+   docker-compose down -v
+   docker-compose up -d --build
+   ```
+
 ## Application Structure
 
 Here's a brief overview of the project structure:
@@ -87,7 +104,6 @@ Here's a brief overview of the project structure:
 ├── Dockerfile            # Dockerfile for the application
 ├── src/                  # Source code of the application
 ├── database/             # Database initialization scripts
-├── .env                  # Environment variables file
 └── README.md             # This file
 ```
 
@@ -108,14 +124,13 @@ You can access the MySQL CLI within the Docker container to interact with your d
 2. **Access the MySQL CLI:**
 
    Once you have the container name, you can access the MySQL CLI using the following command:
+   Default Name: mysqlcontainer
 
    ```bash
-   docker exec -it your_mysql_container_name mysql -u your_user -p
+   docker exec -it mysqlcontainer mysql -u root -padmin
    ```
 
-   Replace `your_mysql_container_name` with the actual container name, and `your_user` with the MySQL username. You'll be prompted for the MySQL password.
-
-   After entering the password, you'll be in the MySQL CLI, where you can run SQL commands directly.
+   Now you'll be in the MySQL CLI, where you can run SQL commands directly.
 
 ## Stopping and Cleaning Up
 
@@ -130,15 +145,3 @@ This command will stop and remove the containers but will keep the volumes intac
 ```bash
 docker-compose down -v
 ```
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request for review.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-This README now includes a section on accessing the MySQL CLI within the Docker container, providing a more comprehensive guide for interacting with the database.
