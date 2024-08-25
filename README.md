@@ -17,8 +17,6 @@ Certainly! Here's the updated README file that includes instructions for using t
 5. [Usage](#usage)
    - [Accessing the MySQL CLI](#accessing-the-mysql-cli)
 6. [Stopping and Cleaning Up](#stopping-and-cleaning-up)
-7. [Contributing](#contributing)
-8. [License](#license)
 
 ## Introduction
 
