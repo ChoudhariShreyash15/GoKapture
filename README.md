@@ -59,7 +59,7 @@ This command will:
 
 Once the containers are up and running, the application should be accessible at `http://localhost:3000` (or the port you specified).
 
-If you get the following error then follow the steps provided
+If you get the following error then follow the steps given below:
 ```
 "error": {
             "code": "ER_NOT_SUPPORTED_AUTH_MODE",
